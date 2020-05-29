@@ -125,6 +125,41 @@ CREATE TABLE FMLD_spoken_languages (
 	FOREIGN KEY (id) REFERENCES FMLD_movies(id)
 );
 
+CREATE TABLE netflix (
+	title VARCHAR(250),
+	duration VARCHAR(250),
+	mpaa_rating VARCHAR(250),
+	listed_in VARCHAR(250),
+	release_year INT,
+	media_type VARCHAR(250)
+);
+
+CREATE TABLE netflix_cast (
+	id INT PRIMARY KEY,
+	title VARCHAR(250),
+	duration VARCHAR(250),
+	mpaa_rating VARCHAR(250),
+	listed_in VARCHAR(250),
+	release_year INT,
+	media_type VARCHAR(250),
+	director VARCHAR(250),
+	netflix_cast VARCHAR(250),
+	country VARCHAR(250),
+	date_added VARCHAR(250)
+);
+
+CREATE TABLE Netflix_movies (
+	title VARCHAR(250),
+	duration VARCHAR(250),
+	mpaa_rating VARCHAR(250),
+	genre VARCHAR(250),
+	release_date DATE,
+	user_rating DECIMAL,
+	rating_count DECIMAL,
+	budget DECIMAL,
+	gross DECIMAL
+);
+
 SELECT 
 tmdb_movies.id,
 fmld_cast.cast_name,
@@ -155,4 +190,28 @@ ON tmdb_movies.id = fmld_movies.id
 INNER JOIN FMLD_crew
 ON fmld_movies.id = fmld_crew.id
 WHERE fmld_crew.job = 'Director' AND fmld_crew.crew_name = 'John Lasseter'
+LIMIT 20;
+
+
+SELECT 
+	netflix.title,
+	netflix.duration,
+	netflix.release_year,
+	netflix_cast.mpaa_rating,
+	netflix_cast.netflix_cast
+FROM netflix
+INNER JOIN netflix_cast
+ON netflix.title = netflix_cast.title
+WHERE netflix.title = 'District 9'
+LIMIT 20;
+
+SELECT
+	fmld_movies.title,
+	fmld_movies.release_date,
+	netflix.mpaa_rating,
+	fmld_movies.runtime
+FROM fmld_movies
+INNER JOIN netflix
+ON fmld_movies.title = netflix.title
+WHERE fmld_movies.release_date > '2015-01-01'
 LIMIT 20;
