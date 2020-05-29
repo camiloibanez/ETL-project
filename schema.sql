@@ -87,10 +87,10 @@ CREATE TABLE FMLD_movies (
 );
 
 CREATE TABLE FMLD_cast (
-	movie_id DECIMAL,
+	id DECIMAL,
 	character varchar,
 	cast_name varchar,
-	FOREIGN KEY (movie_id) REFERENCES FMLD_movies(id)
+	FOREIGN KEY (id) REFERENCES FMLD_movies(id)
 );
 
 CREATE TABLE FMLD_crew (
@@ -109,7 +109,7 @@ CREATE TABLE FMLD_genre (
 
 CREATE TABLE FMLD_production_companies (
 	id DECIMAL,
-	production_company VARCHAR(100),
+	production_company VARCHAR(1000),
 	FOREIGN KEY (id) REFERENCES FMLD_movies(id)
 );
 
@@ -124,3 +124,35 @@ CREATE TABLE FMLD_spoken_languages (
 	spoken_languages VARCHAR(100),
 	FOREIGN KEY (id) REFERENCES FMLD_movies(id)
 );
+
+SELECT 
+tmdb_movies.id,
+fmld_cast.cast_name,
+fmld_movies.title,
+fmld_movies.release_date,
+fmld_movies.revenue,
+fmld_movies.budget,
+fmld_movies.runtime
+FROM tmdb_movies
+INNER JOIN fmld_movies
+ON tmdb_movies.id = fmld_movies.id
+INNER JOIN FMLD_cast
+ON fmld_movies.id = fmld_cast.id
+WHERE fmld_cast.cast_name = 'Jim Carrey'
+LIMIT 20;
+
+SELECT 
+tmdb_movies.id,
+fmld_crew.crew_name,
+fmld_movies.title,
+fmld_movies.release_date,
+fmld_movies.revenue,
+fmld_movies.budget,
+fmld_movies.runtime
+FROM tmdb_movies
+INNER JOIN fmld_movies
+ON tmdb_movies.id = fmld_movies.id
+INNER JOIN FMLD_crew
+ON fmld_movies.id = fmld_crew.id
+WHERE fmld_crew.job = 'Director' AND fmld_crew.crew_name = 'John Lasseter'
+LIMIT 20;
