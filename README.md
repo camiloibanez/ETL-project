@@ -1,22 +1,53 @@
-ETL-Project 				Movie and TV Show Data Base
-Arthur Ibanez
-Peyton Harsh
-Osvaldo Meza
+# ETL Project
 
-Description
+We collected data from Kaggle and Data.world on Netflix, TMDB and IMDB movie databases. This data was cleaned and put in a unified database that can be queried along certain parameters to find movies and Netflix shows that fit certain criteria.
 
-	To help people with their sudden newfound boredom, we have assembled a movie and TV-Show data base that will help sort through the many options available.  The following is a small breakdown of the process undertaken to establish the database and make it accessible for a user.
+## Getting Started
 
-Extracting Data
+You will need to open pgAdmin4 and create a database. From there you can run schema.sql to load the table structure. After the tables are loaded you can upload the csvs in the data folder to their correspondingly named tables.
 
-	Movie and TV-Show data was gathered through Kaggle.com and data.world.  CSV   files were downloaded for Netflix data, TMDB (The Movie Data Base), and IMDB (Internet Movie Database) from Kaggle, as well as a separate movie database was used from data.world.  All data sets and files were saved in a “Data” folder and read into a jupyter notebook to clean the data and sort through unnecessary pieces.
+	CREATE TABLE tmdb_movies (
+		id DECIMAL PRIMARY KEY,
+		budget DECIMAL,
+		homepage VARCHAR(300),
+		original_language VARCHAR(100),
+		overview VARCHAR(5000),
+		popularity DECIMAL,
+		release_date DATE,
+		revenue DECIMAL,
+		runtime DECIMAL,
+		tagline VARCHAR(1000),
+		title VARCHAR(1000),
+		vote_average DECIMAL,
+		vote_count DECIMAL
+	);
 
-Transforming Data
+## Running Tests
 
-	After all csv files were read into a jupyter notebook, the data was condensed to only include relevant columns that would have a correlation to the other data sets that were extracted. There were 2 movie data sets where certain elements were imbedded as a list of dictionaries in a single column; Python was used to run a for loop and nested loop to extract the data.  Once extracted, the cast, character, and id were saved into lists that could then be used to create separate tables.  These new data frames were then exported as SQL files to create a data base where primary keys were assigned to link together the different tables that were created.  SQL schemas for additional tables were produced through pgAdmin4, these tables were populated by importing CSV files that had been cleaned with Pandas.
+The second half of schema.sql holds query examples for searching the database. From here you can query the database for films and shows that meet your criteria such as genre, cast, director, title, release date, etc.
 
-Loading Data
+	SELECT 
+	tmdb_movies.id,
+	fmld_cast.cast_name,
+	fmld_movies.title,
+	fmld_movies.release_date,
+	fmld_movies.revenue,
+	fmld_movies.budget,
+	fmld_movies.runtime
+	FROM tmdb_movies
+	INNER JOIN fmld_movies
+	ON tmdb_movies.id = fmld_movies.id
+	INNER JOIN FMLD_cast
+	ON fmld_movies.id = fmld_cast.id
+	WHERE fmld_cast.cast_name = 'Jim Carrey'
+	LIMIT 20;
 
-	Data was lastly stored on SQL databases where the transformed datasets were used to create relational tables that could then be used to query movie, cast information, character information, release date, along with additional movie and TV show information. SQL Alchemy was also used to load the data sets into postgres.
+## Authors
 
+- Arthur Ibanez - [camiloibanez](https://github.com/camiloibanez)
+- Peyton Harsh - [peytonsharsh](https://github.com/peytonsharsh)
+- Osvaldo Meza - [omeza3547](https://github.com/omeza3547)
 
+## Acknowledgements
+
+- [Trilogy Education Services](https://www.trilogyed.com/)
